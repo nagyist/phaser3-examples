@@ -4,6 +4,9 @@ class Example extends Phaser.Scene
     {
         // this.load.setBaseURL('https://cdn.phaserfiles.com/v385');
         this.load.image('orb-n', 'assets/normal-maps/orb-256.png');
+
+        // For viewing at any angle, a 360 degree panorama with 180 degree height is ideal.
+        // You can acquire many such assets from Adobe Stock or other sources.
         this.load.image('environment', 'assets/panorama-360/KPNO-Drone-360-2-CC2-by-NOIRLab.jpg')
     }
 
