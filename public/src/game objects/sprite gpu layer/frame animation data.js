@@ -79,7 +79,7 @@ class Example extends Phaser.Scene
             0, 0, 0, spriteGPULayer.EASE.Linear, // frame index
             1, 0, 0, 0, // tint blend
             0, 0, 0, 0, // tint bottom-left, top-left, bottom-right, top-right
-            0.5, 0.5, 0, 0, // origin X, Y, tintFill, creationTime
+            0.5, 0.5, 0, 0, // origin X, Y, tintMode, creationTime
             1, 1 // scroll factor X, Y
         ]);
         // Set the tint colors as Uint32Array, because float32 doesn't support these values.

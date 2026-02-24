@@ -31,7 +31,7 @@ class Example extends Phaser.Scene
             }
             else
             {
-                this.setTintFill(Phaser.TintModes.FILL);
+                this.setTintMode(Phaser.TintModes.FILL);
             }
 
         });
@@ -44,7 +44,7 @@ class Example extends Phaser.Scene
             }
             else
             {
-                this.setTint(0xffff00, 0xffff00, 0xff0000, 0xff0000).setTintFill(Phaser.TintModes.FILL);
+                this.setTint(0xffff00, 0xffff00, 0xff0000, 0xff0000).setTintMode(Phaser.TintModes.FILL);
             }
 
         });
