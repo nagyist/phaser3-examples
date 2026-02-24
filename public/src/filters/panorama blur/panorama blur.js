@@ -28,7 +28,7 @@ class Example extends Phaser.Scene
         const panoramaBlur = envBlurSource.enableFilters().filters.internal.addPanoramaBlur({
             samplesX: envW / 16, // Be careful: more samples are much more costly!
             samplexY: envH / 16,
-            power: 2 // Emphasise sun over darker areas.
+            power: 2 // Emphasize sun over darker areas.
         });
 
         // Render panorama at blur 1...
@@ -62,68 +62,48 @@ class Example extends Phaser.Scene
         // Remove blur source because blurs are costly per-frame.
         envBlurSource.destroy();
 
+        // Display textures as clickable icons.
+        this.add.text(320, 32, 'Click a blur level').setOrigin(0.5);
+        const image0 = this.add.image(160, 200, 'environment').setScale(0.2);
+        const image1 = this.add.image(160, 400, 'environment-blur-0.125').setScale(0.2);
+        const image2 = this.add.image(160, 600, 'environment-blur-0.5').setScale(0.2);
+        const image3 = this.add.image(480, 200, 'environment-blur-0.0625').setScale(0.2);
+        const image4 = this.add.image(480, 400, 'environment-blur-0.25').setScale(0.2);
+        const image5 = this.add.image(480, 600, 'environment-blur-1').setScale(0.2);
+
         // Draw an orb for reuse.
-        const orb = this.add.rectangle(0, 0, 256, 256, 0xffffff);
-        orb.enableFilters().filters.internal.addMask('orb-n');
-        const orbTexture = this.textures.addDynamicTexture('orb', 256, 256);
-        orbTexture.draw(orb, 128, 128).render();
-        orb.destroy();
+        const rect = this.add.rectangle(0, 0, 512, 512, 0xffffff);
+        rect.enableFilters().filters.internal.addMask('orb-n');
+        const orbTexture = this.textures.addDynamicTexture('orb', 512, 512);
+        orbTexture.draw(rect, 256, 256).render();
+        rect.destroy();
 
-        // Light a series of orbs with the panorama at different roughness levels.
-        const orb1 = this.add.image(200, 200, 'orb');
-        this.orb1LightImage = orb1.enableFilters().filters.internal.addImageLight({
-            environmentMap: 'environment-blur-1',
+        // Light an orb with the selected texture.
+        const orb = this.add.image(960, 360, 'orb');
+        this.orbLightImage = orb.enableFilters().filters.internal.addImageLight({
+            environmentMap: 'environment',
             normalMap: 'orb-n'
         });
 
-        const orb2 = this.add.image(640, 200, 'orb');
-        this.orb2LightImage = orb2.enableFilters().filters.internal.addImageLight({
-            environmentMap: 'environment-blur-0.5',
-            normalMap: 'orb-n'
-        });
-
-        const orb3 = this.add.image(1080, 200, 'orb');
-        this.orb3LightImage = orb3.enableFilters().filters.internal.addImageLight({
-            environmentMap: 'environment-blur-0.25',
-            normalMap: 'orb-n'
-        });
-
-        const orb4 = this.add.image(200, 520, 'orb');
-        this.orb4LightImage = orb4.enableFilters().filters.internal.addImageLight({
-            environmentMap: 'environment-blur-0.125',
-            normalMap: 'orb-n'
-        });
-
-        const orb5 = this.add.image(640, 520, 'orb');
-        this.orb5LightImage = orb5.enableFilters().filters.internal.addImageLight({
-            environmentMap: 'environment-blur-0.0625',
-            normalMap: 'orb-n'
-        });
-
-        const orb6 = this.add.image(1080, 520, 'orb');
-        this.orb6LightImage = orb6.enableFilters().filters.internal.addImageLight({
-            environmentMap: 'environment', // Unfiltered environment.
-            normalMap: 'orb-n'
-        });
+        // Allow texture swapping.
+        const setClick = (sprite, texture) => {
+            sprite.setInteractive().on('pointerdown', () => {
+                this.orbLightImage.setEnvironmentMap(texture);
+            });
+        }
+        setClick(image0, 'environment');
+        setClick(image1, 'environment-blur-0.125');
+        setClick(image2, 'environment-blur-0.5');
+        setClick(image3, 'environment-blur-0.0625');
+        setClick(image4, 'environment-blur-0.25');
+        setClick(image5, 'environment-blur-1');
     }
 
     update (time, delta)
     {
-        const filters = [
-            this.orb1LightImage,
-            this.orb2LightImage,
-            this.orb3LightImage,
-            this.orb4LightImage,
-            this.orb5LightImage,
-            this.orb6LightImage
-        ];
-        for (const filter of filters)
-        {
-            filter.viewMatrix
-            .identity() // Reset matrix
-            .rotateY(time / 5000) // Look left/right
-            .rotateX(0.5 * Math.sin(time / 1765)); // Look up/down
-        }
+        this.orbLightImage.viewMatrix
+        .identity() // Reset matrix
+        .rotateY(time / 5000); // Look left/right
     }
 }
 
